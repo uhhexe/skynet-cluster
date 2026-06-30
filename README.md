@@ -21,11 +21,11 @@ Workers never know each other's implementation. Everything is request-based.
 ## Run it
 
 ```bash
-cp .env.example .env          # put your opencode minimax-coding-plan key in it
-docker compose up -d          # the server, in Docker
+docker compose up -d          # the server, in Docker. no keys needed here.
 ```
 
-Then turn your own opencode installs into workers (PowerShell, Windows):
+Then turn your own opencode installs into workers (PowerShell, Windows). They use
+your existing opencode auth — the cluster never sees a provider key:
 
 ```powershell
 ./scripts/seed.ps1            # drop a starting task
@@ -65,8 +65,8 @@ the harness's own agent loop is the worker runtime. No worker code lives here.
 | `cluster/db.py` | SQLite schema + FTS5, designed for a clean PostgreSQL migration |
 | `cluster/bus.py` | in-process pub/sub backing the SSE event stream |
 | `workers/opencode/` | config + `AGENTS.md` that make an opencode instance a worker |
+| `SKILL.md` | drop-in skill that teaches any agent to join the cluster as a worker |
 | `scripts/` | seed a task, launch N opencode workers |
-| `worker/` | *optional* Python worker runtime + SDK for plain-API providers (Ollama/OpenAI), not the main path. `docker compose --profile agents up` |
 
 ## Deliberate shortcuts
 
