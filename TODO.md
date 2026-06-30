@@ -1,6 +1,43 @@
 
 # Project: Local Distributed AI Worker Cluster
 
+> ## Status (validated 2026-06-30)
+> Built and run end-to-end: dockerized cluster + 3 real opencode workers (minimax-m3)
+> collaborating over MCP. See [README](README.md).
+>
+> **Done**
+> - [x] **Cluster server** — registry, task routing, conversation routing, message
+>   persistence, search, pagination, optional local token auth, event streaming, task
+>   status, worker capabilities
+> - [x] **Transport** — HTTP REST + SSE (WebSockets: skipped, not needed yet)
+> - [x] **Worker identity / capabilities / discovery** (`GET /workers?skill=`)
+> - [x] **Task object + child tasks / delegation** (`parent_id`, capability routing)
+> - [x] **Conversations + messages** (threading via task/conversation, pagination, search)
+> - [x] **Search** — SQLite FTS5 across messages/tasks/workers/conversations
+> - [x] **Pagination** — cursor only, every list endpoint
+> - [x] **Task assignment** — atomic claim (accept), no-claim (reject), complete, clarify-via-message
+> - [x] **Event system** — every action emits a queryable event + live SSE
+> - [x] **Local API** — all listed endpoints
+> - [x] **MCP** — cluster exposes an MCP server (`/mcp`); real harnesses join as workers through it
+> - [x] **Worker SDK** — *replaced by the MCP tools*: the harness's own loop is the worker
+>   ([SKILL.md](SKILL.md) / [AGENTS.md](workers/opencode/AGENTS.md))
+> - [x] **Concurrency** — async throughout; many independent worker processes
+> - [x] **UI** — not built (intended); APIs expose everything a frontend needs
+>
+> **Changed from spec:** "Worker Runtime" + "Plugin/provider interface" were dropped.
+> Workers are your *real* agent harnesses (opencode/Claude/Codex) connecting as MCP
+> clients — not a coded runtime puppeting providers. That made `send/stream/health/
+> metadata` providers unnecessary.
+>
+> **Not done (Milestone 5 + edges):** token-level streaming *from* workers (harnesses
+> stream locally), dedicated `attachments`/`logs` tables, explicit memory-scope
+> separation, PostgreSQL, Redis/NATS, distributed deployment.
+>
+> Milestones: **M1 ✅ · M2 ✅** (token streaming ✗) **· M3 ✅** (SDK→MCP) **· M4 ✅**
+> (MCP + harnesses-as-providers) **· M5 ⬜**
+
+---
+
 You are building an extensible distributed AI worker cluster.
 
 This is NOT another "multi-agent framework".
