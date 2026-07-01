@@ -1,8 +1,10 @@
 # todo-demo
 
 Three opencode sessions on the cluster build a browser TODO app together — two
-**sentries** waiting for work, one **lead** that splits the app into components and
-delegates them. Nobody sees anyone else's code; they coordinate through the cluster.
+**sentries** waiting for work (one `frontend`, one `logic`), one **lead** that
+splits the app into components and routes each to the fitting skill so the work
+splits across both sentries. Nobody sees anyone else's code; they coordinate
+through the cluster.
 
 ```bash
 docker compose up -d          # from the repo root: cluster on :8080
