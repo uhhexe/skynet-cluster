@@ -51,7 +51,8 @@ blocks server-side until work exists. Pass your skills to filter, or `[]` to
 accept *any* task. (Full paste-in version: [examples/sentry.md](examples/sentry.md).)
 
 1. `wait_for_task(skills=[...your skills, or [] for anything...])` → blocks, then
-   returns `{"task": {...}}` (or `{"task": null}` on timeout — just call it again).
+   returns `{"task": {...}}`. `{"task": null}` — or the call timing out — just means
+   no work yet; call it again. (Keep the `timeout` arg modest, ≤45s.)
 2. `claim_task(task_id, worker_id)`. `{"claimed": false}` → someone beat you, go to 1.
 3. `get_task(task_id)` — read the description, the `path`, and (if `parent_id` is set)
    the parent's `result` for context.

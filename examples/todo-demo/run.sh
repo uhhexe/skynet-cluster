@@ -21,7 +21,7 @@ sentry() {
   local name=$1 id=$2 skill=$3
   local prompt="You are a cluster sentry '$name' (worker_id='$id'), skills: $skill. Using the cluster MCP tools:
 register_worker(name='$name', skills=['$skill'], worker_id='$id').
-wait_for_task(skills=['$skill'], timeout=100). If it returns {task:null}, stop.
+wait_for_task(skills=['$skill'], timeout=30). If it returns {task:null} or times out, stop.
 claim_task(task_id,'$id'); if claimed is false, stop.
 get_task(task_id); build EXACTLY the one file it asks for in your current directory with your write tool, matching the filename and integration contract precisely.
 send_message(sender='$id', content='<one line>', task_id=task_id, conversation_id=<the task conversation_id>).

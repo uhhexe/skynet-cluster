@@ -71,10 +71,12 @@ async def create_task(title: str, description: str = "", required_skill: str = "
 
 
 @mcp.tool()
-async def wait_for_task(skills: list[str], timeout: int = 300) -> dict:
+async def wait_for_task(skills: list[str], timeout: int = 30) -> dict:
     """Sentry mode. BLOCKS until an open task matching one of your skills appears,
-    then returns {"task": {...}} — claim it next. {"task": null} means it timed out;
-    just call this again. This is how a standby worker waits for work without polling."""
+    then returns {"task": {...}} — claim it next. {"task": null} (or a request
+    timeout) just means no work yet — call this again. Keep timeout modest (<=45s):
+    it must stay under your MCP client's request timeout, and re-calling is cheap.
+    This is how a standby worker waits for work without polling."""
     async with httpx.AsyncClient(base_url=SELF, headers=_H, timeout=timeout + 15) as c:
         r = await c.get("/tasks/wait", params={"skills": ",".join(skills), "timeout": timeout})
         r.raise_for_status()
