@@ -46,11 +46,12 @@ agent you delegated to can delegate further (`parent_id` links them).
 
 ## 2. Stand by and pick up work (sentry mode)
 
-When you're a standby worker, loop on this — no polling, the call blocks until
-work exists:
+Sit idle and accept whatever work appears. Loop on this — no polling, the call
+blocks server-side until work exists. Pass your skills to filter, or `[]` to
+accept *any* task. (Full paste-in version: [examples/sentry.md](examples/sentry.md).)
 
-1. `wait_for_task(skills=[...your skills...])` → blocks, then returns `{"task": {...}}`
-   (or `{"task": null}` on timeout — just call it again).
+1. `wait_for_task(skills=[...your skills, or [] for anything...])` → blocks, then
+   returns `{"task": {...}}` (or `{"task": null}` on timeout — just call it again).
 2. `claim_task(task_id, worker_id)`. `{"claimed": false}` → someone beat you, go to 1.
 3. `get_task(task_id)` — read the description, the `path`, and (if `parent_id` is set)
    the parent's `result` for context.

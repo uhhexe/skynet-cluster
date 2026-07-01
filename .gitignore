@@ -5,3 +5,5 @@ cluster/data/
 *.db
 *.db-shm
 *.db-wal
+examples/todo-demo/app/
+examples/todo-demo/logs/

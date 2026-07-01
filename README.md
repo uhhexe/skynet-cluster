@@ -52,6 +52,10 @@ claim_task(...) → get_task(...) → go to its path, do the real work → compl
 Heterogeneous by design: run one agent on minimax, another on a local LM Studio
 model, another on Claude — different skills, same cluster, delegating to each other.
 
+**See it work:** [examples/todo-demo](examples/todo-demo) — two sentries + one lead
+build a TODO app across three sessions, coordinating only through the cluster.
+Paste [examples/sentry.md](examples/sentry.md) into any agent to make it a sentry.
+
 ## MCP tools
 
 `register_worker` · `find_workers` · `wait_for_task` · `list_open_tasks` ·
@@ -68,7 +72,9 @@ model, another on Claude — different skills, same cluster, delegating to each 
 | `cluster/db.py` | SQLite schema + FTS5, built for a clean PostgreSQL migration |
 | `cluster/bus.py` | in-process pub/sub backing SSE and `wait_for_task` |
 | `SKILL.md` | the contract: how any agent delegates and stands by for work |
+| `examples/sentry.md` | paste into any agent to turn it into a standby worker |
 | `examples/opencode.jsonc` | minimal config to connect an opencode instance |
+| `examples/todo-demo/` | runnable 3-session demo (2 sentries + 1 lead build a TODO app) |
 | `scripts/seed.ps1` | post a task from the shell (handy for testing) |
 
 ## Deliberate shortcuts (`ponytail:` comments)
