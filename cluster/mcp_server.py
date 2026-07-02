@@ -4,7 +4,7 @@ Point any MCP-capable harness (opencode, Claude Code, Codex, ...) at
 http://localhost:18888/mcp and it self-drives the cluster through these tools —
 no coded worker loop, the harness's own agent IS the worker.
 
-ponytail: tools proxy over loopback to the cluster's own REST API instead of
+Note: tools proxy over loopback to the cluster's own REST API instead of
 re-implementing routing/claim/event logic. Same process, identical code path,
 negligible overhead at localhost scale. Collapse into a shared service layer
 only if the loopback hop ever shows up in a profile.

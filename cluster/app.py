@@ -15,7 +15,7 @@ from pydantic import BaseModel, Field
 from . import bus, db
 from .mcp_server import mcp, mcp_app
 
-TOKEN = os.environ.get("CLUSTER_TOKEN")  # ponytail: one shared token, unset = open (localhost)
+TOKEN = os.environ.get("CLUSTER_TOKEN")  # one shared token; unset = open (localhost)
 
 # the MCP streamable-http session manager must run for the lifetime of the app
 app = FastAPI(title="AI Work Cluster", version="0.1.0",

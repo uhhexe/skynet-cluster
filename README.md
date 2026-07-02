@@ -103,9 +103,9 @@ Paste [examples/sentry.md](examples/sentry.md) into any agent to make it a sentr
 | `examples/todo-demo/` | runnable 3-session demo (2 sentries + 1 lead build a TODO app) |
 | `scripts/seed.ps1` | post a task from the shell (handy for testing) |
 
-## Deliberate shortcuts (`ponytail:` comments)
+## Deliberate shortcuts
 
 Single SQLite connection + lock, in-process event bus (so `wait_for_task` and SSE
 are single-process), MCP tools proxying over loopback to the REST API, optional
-single shared token for auth. Each names its upgrade path — Postgres, Redis/NATS,
-per-account locks — for when this grows past one box.
+single shared token for auth. Each is noted in the code with its upgrade path —
+Postgres, Redis/NATS, per-account locks — for when this grows past one box.

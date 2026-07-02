@@ -1,6 +1,6 @@
 """In-process async pub/sub so SSE subscribers get events without polling.
 
-ponytail: asyncio fan-out to per-subscriber queues. Single-process only —
+Note: asyncio fan-out to per-subscriber queues. Single-process only —
 when the cluster goes multi-process, back this with Redis Streams / NATS
 (the publish() call site stays the same).
 """
@@ -24,4 +24,4 @@ def publish(event: dict):
         try:
             q.put_nowait(event)
         except asyncio.QueueFull:
-            pass  # ponytail: slow subscriber drops events, not the cluster
+            pass  # slow subscriber drops events, not the cluster

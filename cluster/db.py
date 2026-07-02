@@ -1,6 +1,6 @@
 """SQLite persistence for the cluster. One connection, WAL, a lock.
 
-ponytail: single global connection guarded by a lock. Fine for localhost /
+Note: single global connection guarded by a lock. Fine for localhost /
 dozens of workers. Swap for a pool / PostgreSQL when concurrency demands it
 (schema is plain SQL, no SQLite-only column types).
 """
@@ -95,7 +95,7 @@ def conn() -> sqlite3.Connection:
         _conn.row_factory = sqlite3.Row
         _conn.execute("PRAGMA journal_mode=WAL")
         _conn.executescript(SCHEMA)
-        # ponytail: cheap idempotent migration for DBs created before `path` existed
+        # cheap idempotent migration for DBs created before `path` existed
         try:
             _conn.execute("ALTER TABLE tasks ADD COLUMN path TEXT")
         except sqlite3.OperationalError:
