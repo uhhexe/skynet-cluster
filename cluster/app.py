@@ -9,7 +9,7 @@ import os
 import uuid
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Query
-from fastapi.responses import StreamingResponse
+from fastapi.responses import HTMLResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
 from . import bus, db
@@ -105,6 +105,36 @@ class ConversationIn(BaseModel):
 def health():
     n = db.query_one("SELECT COUNT(*) c FROM workers WHERE status='online'")
     return {"status": "ok", "workers_online": n["c"] if n else 0}
+
+
+# ---------- status / dashboard ----------
+@app.get("/status")
+def status():
+    """One-shot snapshot of the whole cluster: workers, the task queue, recent events.
+    Backs the dashboard at /, and handy on its own for 'what's going on right now'."""
+    def rows(sql, args=()):
+        out = []
+        for r in db.query(sql, args):
+            d = db.row_to_dict(r)
+            d.pop("seq", None)
+            out.append(d)
+        return out
+
+    tasks = rows("SELECT seq,* FROM tasks ORDER BY seq DESC LIMIT 200")
+    counts: dict[str, int] = {}
+    for t in tasks:
+        counts[t["status"]] = counts.get(t["status"], 0) + 1
+    return {
+        "counts": counts,
+        "workers": rows("SELECT rowid AS seq,* FROM workers ORDER BY rowid DESC"),
+        "tasks": tasks,
+        "events": rows("SELECT seq,* FROM events ORDER BY seq DESC LIMIT 30"),
+    }
+
+
+@app.get("/", response_class=HTMLResponse)
+def dashboard():
+    return _DASHBOARD_HTML
 
 
 # ---------- workers ----------
@@ -420,3 +450,57 @@ async def stream_events():
 
 # real agent harnesses connect here as workers
 app.mount("/mcp", mcp_app)
+
+
+_DASHBOARD_HTML = """<!doctype html><html><head><meta charset=utf-8>
+<title>AI Work Cluster</title><meta name=viewport content="width=device-width,initial-scale=1">
+<style>
+:root{--bg:#0d1117;--card:#161b22;--bd:#30363d;--fg:#e6edf3;--mut:#8b949e;--acc:#58a6ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);
+font:14px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace}
+header{padding:14px 20px;border-bottom:1px solid var(--bd);display:flex;gap:16px;align-items:baseline;flex-wrap:wrap}
+h1{font-size:16px;margin:0}.mut{color:var(--mut)}.pill{padding:1px 8px;border:1px solid var(--bd);border-radius:99px;font-size:12px}
+main{display:grid;grid-template-columns:230px 1fr 300px;gap:14px;padding:14px;align-items:start}
+@media(max-width:900px){main{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:10px 12px}
+.card h2{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);margin:0 0 8px}
+.w{padding:6px 0;border-bottom:1px solid var(--bd)}.w:last-child{border:0}
+.dot{display:inline-block;width:8px;height:8px;border-radius:99px;background:#3fb950;margin-right:6px}
+.cols{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:900px){.cols{grid-template-columns:1fr 1fr}}
+.col h3{font-size:12px;margin:0 0 6px;display:flex;justify-content:space-between}
+.t{background:#0d1117;border:1px solid var(--bd);border-radius:6px;padding:6px 8px;margin-bottom:6px;font-size:12px}
+.t b{font-weight:600}.t .m{color:var(--mut);font-size:11px}
+.skill{color:var(--acc)}.ev{font-size:11px;color:var(--mut);padding:3px 0;border-bottom:1px solid #21262d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev b{color:var(--fg)}.open h3{color:#d29922}.assigned h3{color:#58a6ff}.completed h3{color:#3fb950}.failed h3{color:#f85149}
+</style></head><body>
+<header><h1>🛰️ AI Work Cluster</h1>
+<span class=pill id=cnt>…</span><span class=mut id=upd></span>
+<span class=mut style=margin-left:auto>live · refreshes every 2s</span></header>
+<main>
+<section class=card><h2>Workers</h2><div id=workers class=mut>loading…</div></section>
+<section class=card><h2>Task queue</h2><div class=cols id=queue></div></section>
+<section class=card><h2>Live events</h2><div id=events></div></section>
+</main>
+<script>
+const ST=['open','assigned','completed','failed'];
+const esc=s=>(s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+async function tick(){
+ let d; try{d=await (await fetch('/status')).json()}catch(e){return}
+ const on=d.workers.filter(w=>w.status==='online').length;
+ cnt.textContent=`${on} workers · ${d.tasks.length} tasks`;
+ upd.textContent='updated '+new Date().toLocaleTimeString();
+ workers.innerHTML=d.workers.map(w=>`<div class=w><span class=dot></span><b>${esc(w.name)}</b>
+   <div class=m>${(w.skills||[]).map(s=>`<span class=skill>${esc(s)}</span>`).join(' ')||'—'}</div>
+   <div class=m>${esc(w.id)}</div></div>`).join('')||'<span class=mut>none yet</span>';
+ queue.innerHTML=ST.map(s=>{
+   const ts=d.tasks.filter(t=>t.status===s);
+   return `<div class="col ${s}"><h3><span>${s}</span><span>${ts.length}</span></h3>`+
+    ts.map(t=>`<div class=t><b>${esc(t.title)}</b>
+      <div class=m>${t.required_skill?'<span class=skill>'+esc(t.required_skill)+'</span> ':''}${t.assigned_worker?'→ '+esc(t.assigned_worker):''}</div>
+      ${t.path?'<div class=m>'+esc(t.path)+'</div>':''}</div>`).join('')+'</div>';
+ }).join('');
+ events.innerHTML=d.events.map(e=>`<div class=ev><b>${esc(e.type)}</b> ${esc(e.actor||'')} <span class=mut>${esc((e.ref_id||''))}</span></div>`).join('');
+}
+tick();setInterval(tick,2000);
+</script></body></html>"""

@@ -21,6 +21,13 @@ knowing anything about each other.
 The cluster never knows what opencode is. The intelligence is entirely in the
 agents; the **[skill](SKILL.md)** is what teaches any agent how to use the cluster.
 
+![A lead opencode session splitting a build into three tasks (Scaffold+Docker,
+Backend API, Frontend UI) and delegating them; a sentry session on the right
+claiming one and working in the target folder.](docs/task.png)
+
+*Above: a lead session delegates three tasks into the cluster; a sentry claims one
+(`cluster_get_task`) and does the work in that folder — all over MCP.*
+
 ## Run the server
 
 It's one small Python process (~30 MB, a SQLite file), so the light way is no Docker:
@@ -37,6 +44,13 @@ so prefer the script above unless you specifically need the isolation:
 docker compose up -d        # the cluster only; workers are your host agents
 curl localhost:8080/health
 ```
+
+## See what's going on
+
+Open **http://localhost:8080/** for a live dashboard — workers, the task queue
+grouped by status (open / assigned / completed / failed), and a rolling event feed
+(refreshes every 2s). For scripts, **`GET /status`** returns the same as one JSON
+snapshot.
 
 ## Make your agents use it
 
@@ -77,7 +91,7 @@ Paste [examples/sentry.md](examples/sentry.md) into any agent to make it a sentr
 
 | Path | What |
 |------|------|
-| `cluster/app.py` | REST API: workers, tasks (+ `path`, `wait_for_task` long-poll), messages, conversations, events, search |
+| `cluster/app.py` | REST API: workers, tasks (+ `path`, `wait_for_task` long-poll, atomic claim), messages, conversations, events, search, `/status` + live dashboard at `/` |
 | `cluster/mcp_server.py` | the MCP server mounted at `/mcp` — how agents connect |
 | `cluster/db.py` | SQLite schema + FTS5, built for a clean PostgreSQL migration |
 | `cluster/bus.py` | in-process pub/sub backing SSE and `wait_for_task` |
