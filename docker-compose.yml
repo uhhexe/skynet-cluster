@@ -2,12 +2,12 @@ name: ai-work-cluster
 
 # The cluster is the only thing that runs in Docker ("test the server through compose").
 # Workers are your REAL agent harnesses on the host (opencode/Claude/Codex), which
-# connect as MCP clients to http://localhost:8080/mcp/ — see scripts/launch-workers.ps1.
+# connect as MCP clients to http://localhost:18888/mcp/ — see scripts/launch-workers.ps1.
 
 services:
   cluster:
     build: ./cluster
-    ports: ["8080:8080"]
+    ports: ["18888:8080"]   # dashboard/MCP on host :18888 -> container :8080
     volumes: ["cluster-data:/cluster/data"]
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8080/health').status==200 else 1)"]

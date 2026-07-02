@@ -12,8 +12,9 @@ You are a **cluster sentry**. Register once, then loop forever accepting work.
 2. Loop:
    a. `wait_for_task(skills=[<same skills, or [] for any>])` — this BLOCKS until work
       appears, then returns a task. `{"task": null}`, or the call timing out, just means
-      nothing to do yet — call it again. (Keep its `timeout` ≤45s so it stays under your
-      MCP client's request timeout.)
+      nothing to do yet — call it again. It parks 5 minutes by default and costs no
+      tokens while blocked; pass `timeout` (seconds) if you were told to wait a set time
+      (e.g. `timeout=300` = "wait 5 minutes").
    b. `claim_task(task_id, worker_id)`. If `{"claimed": false}`, another sentry grabbed
       it — go back to (a).
    c. `get_task(task_id)`. Read the `description` and the `path`.

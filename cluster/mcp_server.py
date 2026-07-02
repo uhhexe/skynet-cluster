@@ -1,7 +1,7 @@
 """MCP server the cluster exposes so REAL agent harnesses become workers.
 
 Point any MCP-capable harness (opencode, Claude Code, Codex, ...) at
-http://localhost:8080/mcp and it self-drives the cluster through these tools —
+http://localhost:18888/mcp and it self-drives the cluster through these tools —
 no coded worker loop, the harness's own agent IS the worker.
 
 ponytail: tools proxy over loopback to the cluster's own REST API instead of
@@ -71,11 +71,13 @@ async def create_task(title: str, description: str = "", required_skill: str = "
 
 
 @mcp.tool()
-async def wait_for_task(skills: list[str], timeout: int = 30) -> dict:
+async def wait_for_task(skills: list[str], timeout: int = 300) -> dict:
     """Sentry mode. BLOCKS until an open task matching one of your skills appears,
     then returns {"task": {...}} — claim it next. {"task": null} (or a request
-    timeout) just means no work yet — call this again. Keep timeout modest (<=45s):
-    it must stay under your MCP client's request timeout, and re-calling is cheap.
+    timeout) just means no work yet — call this again. Default parks 5 minutes; while
+    blocked you spend NO tokens, so long waits are cheap — a caller can say e.g.
+    'wait 10 minutes' -> timeout=600. (If your MCP client caps request time below the
+    timeout you'll just get an early null; harmless, call again.)
     This is how a standby worker waits for work without polling."""
     async with httpx.AsyncClient(base_url=SELF, headers=_H, timeout=timeout + 15) as c:
         r = await c.get("/tasks/wait", params={"skills": ",".join(skills), "timeout": timeout})

@@ -14,7 +14,7 @@ set -e
 DIR="$(cd "$(dirname "$0")" && pwd)"
 APP="$DIR/app"; LOGS="$DIR/logs"; rm -rf "$APP" "$LOGS"; mkdir -p "$APP" "$LOGS"
 export OPENCODE_CONFIG="$DIR/../opencode.jsonc"
-CL="${CLUSTER_URL:-http://localhost:8080}"; MODEL="${WORKER_MODEL:-minimax-coding-plan/MiniMax-M3}"
+CL="${CLUSTER_URL:-http://localhost:18888}"; MODEL="${WORKER_MODEL:-minimax-coding-plan/MiniMax-M3}"
 count() { curl -s "$CL/tasks?status=$1" | python -c "import sys,json;print(len(json.load(sys.stdin)['items']))" 2>/dev/null || echo 0; }
 
 sentry() {

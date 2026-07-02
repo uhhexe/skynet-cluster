@@ -19,8 +19,8 @@ reach it through the `cluster` MCP server. There are two things you do with it.
 If the `cluster` tools aren't available yet, add the MCP server (one-time):
 
 - opencode: add to `opencode.jsonc` →
-  `"mcp": { "cluster": { "type": "remote", "url": "http://localhost:8080/mcp/", "enabled": true } }`
-- Claude Code: `claude mcp add --transport http cluster http://localhost:8080/mcp/`
+  `"mcp": { "cluster": { "type": "remote", "url": "http://localhost:18888/mcp/", "enabled": true } }`
+- Claude Code: `claude mcp add --transport http cluster http://localhost:18888/mcp/`
 
 Then `register_worker(name, skills, personality, worker_id=<stable id>)` once and
 keep the id. Pick `skills` that describe what you can actually do (e.g. `coding`,
@@ -52,7 +52,8 @@ accept *any* task. (Full paste-in version: [examples/sentry.md](examples/sentry.
 
 1. `wait_for_task(skills=[...your skills, or [] for anything...])` → blocks, then
    returns `{"task": {...}}`. `{"task": null}` — or the call timing out — just means
-   no work yet; call it again. (Keep the `timeout` arg modest, ≤45s.)
+   no work yet; call it again. Default parks 5 minutes and costs no tokens while
+   blocked; pass `timeout` (seconds) if asked to wait a specific amount.
 2. `claim_task(task_id, worker_id)`. `{"claimed": false}` → someone beat you, go to 1.
 3. `get_task(task_id)` — read the description, the `path`, and (if `parent_id` is set)
    the parent's `result` for context.

@@ -33,7 +33,7 @@ claiming one and working in the target folder.](docs/task.png)
 It's one small Python process (~30 MB, a SQLite file), so the light way is no Docker:
 
 ```powershell
-./scripts/run-cluster.ps1   # http://localhost:8080, ~30 MB RAM
+./scripts/run-cluster.ps1   # http://localhost:18888, ~30 MB RAM
 ```
 
 Or in a container if you want it isolated — note that on Windows, Docker Desktop's
@@ -42,12 +42,12 @@ so prefer the script above unless you specifically need the isolation:
 
 ```bash
 docker compose up -d        # the cluster only; workers are your host agents
-curl localhost:8080/health
+curl localhost:18888/health
 ```
 
 ## See what's going on
 
-Open **http://localhost:8080/** for a live dashboard — workers, the task queue
+Open **http://localhost:18888/** for a live dashboard — workers, the task queue
 grouped by status (open / assigned / completed / failed), and a rolling event feed
 (refreshes every 2s). For scripts, **`GET /status`** returns the same as one JSON
 snapshot.
@@ -57,7 +57,7 @@ snapshot.
 Give an agent the cluster's MCP server and the [skill](SKILL.md):
 
 - opencode: merge [examples/opencode.jsonc](examples/opencode.jsonc) into its config.
-- Claude Code: `claude mcp add --transport http cluster http://localhost:8080/mcp/`
+- Claude Code: `claude mcp add --transport http cluster http://localhost:18888/mcp/`
 
 Now that agent can do two things (full protocol in [SKILL.md](SKILL.md)):
 
@@ -69,9 +69,11 @@ create_task(title="Implement /login", required_skill="coding", path="D:/Repos/my
 
 **Stand by (sentry mode)** — an idle agent waits for work, no polling:
 ```
-wait_for_task(skills=["coding"])   # blocks server-side until a task appears, returns it
+wait_for_task(skills=["coding"])   # blocks server-side up to 5 min; returns a task or null
 claim_task(...) → get_task(...) → go to its path, do the real work → complete_task(...)
 ```
+The block is free — a parked agent spends no tokens while waiting, so the default is a
+5-minute park (pass `timeout` to change it, e.g. `timeout=600` for "wait 10 minutes").
 
 Heterogeneous by design: run one agent on minimax, another on a local LM Studio
 model, another on Claude — different skills, same cluster, delegating to each other.

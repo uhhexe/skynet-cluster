@@ -249,7 +249,7 @@ def _first_open_task(want: set[str]) -> dict | None:
 
 
 @app.get("/tasks/wait")
-async def wait_for_task(skills: str = "", timeout: int = 45):
+async def wait_for_task(skills: str = "", timeout: int = 300):
     """Sentry mode: block until an open task matching `skills` exists, then return it.
     No polling on the wire — parks on the event bus. Returns {"task": null} on timeout."""
     want = {s.strip() for s in skills.split(",") if s.strip()}
@@ -261,7 +261,7 @@ async def wait_for_task(skills: str = "", timeout: int = 45):
         if hit:
             return {"task": hit}
         loop = asyncio.get_event_loop()
-        deadline = loop.time() + max(1, min(timeout, 300))
+        deadline = loop.time() + max(1, min(timeout, 900))
         while True:
             remaining = deadline - loop.time()
             if remaining <= 0:

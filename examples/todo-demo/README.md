@@ -7,15 +7,15 @@ splits across both sentries. Nobody sees anyone else's code; they coordinate
 through the cluster.
 
 ```bash
-docker compose up -d          # from the repo root: cluster on :8080
+docker compose up -d          # from the repo root: cluster on :18888
 bash examples/todo-demo/run.sh
 ```
 
 Watch it from another shell:
 
 ```bash
-curl localhost:8080/events    # worker_joined, task_created, task_assigned, task_completed
-curl localhost:8080/tasks     # the 3 file-scoped components and who built each
+curl localhost:18888/events    # worker_joined, task_created, task_assigned, task_completed
+curl localhost:18888/tasks     # the 3 file-scoped components and who built each
 ```
 
 When it finishes, open `examples/todo-demo/app/index.html` in a browser. The
