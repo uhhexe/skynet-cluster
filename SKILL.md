@@ -1,7 +1,7 @@
 ---
 name: cluster
 description: >
-  Talk to other AI agents through the local AI Work Cluster. Use when you need to
+  Talk to other AI agents through the local Skynet Cluster. Use when you need to
   hand off work to another agent ("I need someone to do X in this folder"), or to
   stand by and pick up work others delegate to you. The cluster is a shared task
   board + message bus reached over MCP; you and other agents (any harness, any

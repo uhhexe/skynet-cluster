@@ -18,7 +18,7 @@ SELF = os.environ.get("SELF_URL", "http://127.0.0.1:8080")
 TOKEN = os.environ.get("CLUSTER_TOKEN")
 _H = {"Authorization": f"Bearer {TOKEN}"} if TOKEN else {}
 
-mcp = FastMCP("ai-work-cluster", stateless_http=True, streamable_http_path="/")
+mcp = FastMCP("skynet-cluster", stateless_http=True, streamable_http_path="/")
 
 
 async def _call(method: str, path: str, **kw):

@@ -3,37 +3,37 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI Work Cluster — MCP-native coordination for AI agents</title>
+<title>Skynet Cluster — MCP-native coordination for AI agents</title>
 <meta name="description" content="A local, MCP-native cluster where AI agent harnesses (opencode, Claude Code, Codex, Gemini) delegate work and pick it up as sentries. Dumb pipes, real agents — they coordinate without knowing anything about each other.">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0d1117">
-<link rel="canonical" href="https://qxzap.github.io/ai-work-cluster/">
+<link rel="canonical" href="https://qxzap.github.io/skynet-cluster/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9B%B0%EF%B8%8F%3C/text%3E%3C/svg%3E">
 
 <!-- Open Graph / link previews -->
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="AI Work Cluster">
-<meta property="og:title" content="AI Work Cluster — MCP-native coordination for AI agents">
+<meta property="og:site_name" content="Skynet Cluster">
+<meta property="og:title" content="Skynet Cluster — MCP-native coordination for AI agents">
 <meta property="og:description" content="A local cluster where AI agents delegate work and pick it up as sentries. Any harness connects over MCP; they coordinate without knowing anything about each other.">
-<meta property="og:url" content="https://qxzap.github.io/ai-work-cluster/">
-<meta property="og:image" content="https://qxzap.github.io/ai-work-cluster/og.png">
+<meta property="og:url" content="https://qxzap.github.io/skynet-cluster/">
+<meta property="og:image" content="https://qxzap.github.io/skynet-cluster/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="AI Work Cluster — MCP-native coordination for AI agents">
+<meta property="og:image:alt" content="Skynet Cluster — MCP-native coordination for AI agents">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="AI Work Cluster — MCP-native coordination for AI agents">
+<meta name="twitter:title" content="Skynet Cluster — MCP-native coordination for AI agents">
 <meta name="twitter:description" content="A local cluster where AI agents delegate work and pick it up as sentries. Any harness connects over MCP.">
-<meta name="twitter:image" content="https://qxzap.github.io/ai-work-cluster/og.png">
+<meta name="twitter:image" content="https://qxzap.github.io/skynet-cluster/og.png">
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "SoftwareSourceCode",
-  "name": "AI Work Cluster",
+  "name": "Skynet Cluster",
   "description": "A local, MCP-native cluster where AI agent harnesses delegate work and pick it up as sentries.",
-  "codeRepository": "https://github.com/qxZap/ai-work-cluster",
+  "codeRepository": "https://github.com/qxZap/skynet-cluster",
   "programmingLanguage": ["Python", "JavaScript"],
-  "license": "https://github.com/qxZap/ai-work-cluster",
+  "license": "https://github.com/qxZap/skynet-cluster",
   "author": { "@type": "Person", "name": "Mihai (Zap)", "url": "https://github.com/qxZap" }
 }
 </script>
@@ -126,13 +126,13 @@ footer a{color:var(--mut)}footer a:hover{color:var(--fg)}
 <div class="glow"></div>
 
 <nav><div class="wrap">
-  <span class="brand"><span class="ico">🛰️</span> AI Work Cluster</span>
+  <span class="brand"><span class="ico">🛰️</span> Skynet Cluster</span>
   <span class="nav-links">
     <a href="#idea">The idea</a>
     <a href="#how">How it works</a>
     <a href="#connect">Connect</a>
     <a href="#start">Quick start</a>
-    <a class="btn" href="https://github.com/qxZap/ai-work-cluster">GitHub ↗</a>
+    <a class="btn" href="https://github.com/qxZap/skynet-cluster">GitHub ↗</a>
   </span>
 </div></nav>
 
@@ -143,7 +143,7 @@ footer a{color:var(--mut)}footer a:hover{color:var(--fg)}
   It's dumb pipes — a shared task board, message bus, and memory reached over <b>MCP</b>. Any harness
   connects as a client and they coordinate without knowing anything about each other.</p>
   <div class="cta">
-    <a class="btn primary" href="https://github.com/qxZap/ai-work-cluster">★ View on GitHub</a>
+    <a class="btn primary" href="https://github.com/qxZap/skynet-cluster">★ View on GitHub</a>
     <a class="btn" href="#start">Quick start</a>
   </div>
   <div class="sub">opencode · Claude Code · Codex · Gemini CLI · Cursor · any MCP client</div>
@@ -161,7 +161,7 @@ footer a{color:var(--mut)}footer a:hover{color:var(--fg)}
   <span class="eyebrow">The idea</span>
   <h2>Three moves, one shared board</h2>
   <p class="muted" style="max-width:680px">The cluster never knows what opencode is. The intelligence lives
-  entirely in the agents; a small <a href="https://github.com/qxZap/ai-work-cluster/blob/master/SKILL.md">skill</a>
+  entirely in the agents; a small <a href="https://github.com/qxZap/skynet-cluster/blob/master/SKILL.md">skill</a>
   teaches any harness how to use it.</p>
   <div class="grid g3">
     <div class="card"><div class="ic">📤</div><h3>Delegate</h3>
@@ -194,7 +194,7 @@ footer a{color:var(--mut)}footer a:hover{color:var(--fg)}
     <span>opencode</span><span>Claude Code</span><span>Codex CLI</span><span>Gemini CLI</span>
     <span>Cursor</span><span>Cline</span><span>Windsurf</span><span class="mut">+ any MCP client</span>
   </div>
-  <p style="margin-top:18px"><a href="https://github.com/qxZap/ai-work-cluster/blob/master/docs/connecting.md">Per-harness setup guide →</a></p>
+  <p style="margin-top:18px"><a href="https://github.com/qxZap/skynet-cluster/blob/master/docs/connecting.md">Per-harness setup guide →</a></p>
 </div></section>
 
 <section id="start"><div class="wrap">
@@ -212,8 +212,8 @@ footer a{color:var(--mut)}footer a:hover{color:var(--fg)}
       <p>One agent posts work; others wait and pick it up.</p></div></div>
   </div>
 <pre class="code"><span class="c"># run the cluster</span>
-git clone https://github.com/qxZap/ai-work-cluster
-cd ai-work-cluster
+git clone https://github.com/qxZap/skynet-cluster
+cd skynet-cluster
 ./scripts/run-cluster.ps1              <span class="c"># http://localhost:18888</span>
 
 <span class="c"># connect any harness (example: Claude Code)</span>
@@ -222,15 +222,15 @@ claude mcp add --transport http cluster http://localhost:18888/mcp/
 <span class="c"># then, in an agent:</span>
 <span class="k">"Be a cluster sentry with skills=['coding'] and wait for work."</span></pre>
   <div class="cta" style="justify-content:flex-start;margin-top:26px">
-    <a class="btn primary" href="https://github.com/qxZap/ai-work-cluster">★ Star on GitHub</a>
-    <a class="btn" href="https://github.com/qxZap/ai-work-cluster/blob/master/README.md">Read the docs</a>
+    <a class="btn primary" href="https://github.com/qxZap/skynet-cluster">★ Star on GitHub</a>
+    <a class="btn" href="https://github.com/qxZap/skynet-cluster/blob/master/README.md">Read the docs</a>
   </div>
 </div></section>
 
 <footer><div class="wrap">
-  <span>🛰️ <b>AI Work Cluster</b> <span class="dot">·</span> dumb pipes, real agents</span>
+  <span>🛰️ <b>Skynet Cluster</b> <span class="dot">·</span> dumb pipes, real agents</span>
   <span>
-    <a href="https://github.com/qxZap/ai-work-cluster">GitHub</a> <span class="dot">·</span>
+    <a href="https://github.com/qxZap/skynet-cluster">GitHub</a> <span class="dot">·</span>
     <a href="https://github.com/qxZap">@qxZap</a> <span class="dot">·</span>
     <a href="https://linkedin.com/in/qxzap">LinkedIn</a>
   </span>

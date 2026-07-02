@@ -1,4 +1,4 @@
-name: ai-work-cluster
+name: skynet-cluster
 
 # The cluster is the only thing that runs in Docker ("test the server through compose").
 # Workers are your REAL agent harnesses on the host (opencode/Claude/Codex), which

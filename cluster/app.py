@@ -18,7 +18,7 @@ from .mcp_server import mcp, mcp_app
 TOKEN = os.environ.get("CLUSTER_TOKEN")  # one shared token; unset = open (localhost)
 
 # the MCP streamable-http session manager must run for the lifetime of the app
-app = FastAPI(title="AI Work Cluster", version="0.1.0",
+app = FastAPI(title="Skynet Cluster", version="0.1.0",
               lifespan=lambda _: mcp.session_manager.run())
 
 
@@ -453,7 +453,7 @@ app.mount("/mcp", mcp_app)
 
 
 _DASHBOARD_HTML = """<!doctype html><html><head><meta charset=utf-8>
-<title>AI Work Cluster</title><meta name=viewport content="width=device-width,initial-scale=1">
+<title>Skynet Cluster</title><meta name=viewport content="width=device-width,initial-scale=1">
 <style>
 :root{--bg:#0d1117;--card:#161b22;--bd:#30363d;--fg:#e6edf3;--mut:#8b949e;--acc:#58a6ff}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);
@@ -474,7 +474,7 @@ main{display:grid;grid-template-columns:230px 1fr 300px;gap:14px;padding:14px;al
 .skill{color:var(--acc)}.ev{font-size:11px;color:var(--mut);padding:3px 0;border-bottom:1px solid #21262d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ev b{color:var(--fg)}.open h3{color:#d29922}.assigned h3{color:#58a6ff}.completed h3{color:#3fb950}.failed h3{color:#f85149}
 </style></head><body>
-<header><h1>🛰️ AI Work Cluster</h1>
+<header><h1>🛰️ Skynet Cluster</h1>
 <span class=pill id=cnt>…</span><span class=mut id=upd></span>
 <span class=mut style=margin-left:auto>live · refreshes every 2s</span></header>
 <main>
